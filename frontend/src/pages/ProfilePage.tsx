@@ -1,7 +1,3 @@
-import React from 'react'
-
 export const ProfilePage = () => {
-  return (
-    <div>ProfilePage</div>
-  )
+  return <div>ProfilePage</div>
 }
