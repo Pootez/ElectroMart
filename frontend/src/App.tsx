@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import { createContext } from 'react'
 import { RouterProvider } from 'react-router'
 import router from './router'
+import { UserContextProvider } from './contexts/UserContext'
+
+export const AppContext = createContext({ isSignedIn: false })
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  useEffect(() => {
-    const token = localStorage.getItem("token")
-    
-  }, [])
-
-  return <RouterProvider router={router} />
+  return (
+    <UserContextProvider>
+      <RouterProvider router={router} />
+    </UserContextProvider>
+  )
 }
 
 export default App
