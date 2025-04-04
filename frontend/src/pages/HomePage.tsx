@@ -7,7 +7,7 @@ export const HomePage = () => {
   return (
     <div>
       HomePage
-      {userDetails && 'Signed in as ' + userDetails.name}
+      {userDetails && 'Signed in as ' + userDetails.username}
     </div>
   )
 }

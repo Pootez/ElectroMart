@@ -1,10 +1,15 @@
+import jwt from 'jsonwebtoken'
+import config from 'config'
+
 export default function (req, res, next) {
   const token = req.header('auth-token')
   if (!token) return res.status(401).send('Access denied. No token provided.')
 
-  if (token == '1234') {
+  try {
+    const decoded = jwt.verify(token, config.get('jwtPrivateKey'))
+    req.user = decoded
     next()
-  } else {
+  } catch (ex) {
     res.status(400).send('Invalid token.')
   }
 }

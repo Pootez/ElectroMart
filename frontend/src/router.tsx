@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './pages/NotFoundPage'
-import { LoginPage } from './pages/LoginPage'
+import { SigninPage } from './pages/SigninPage'
 import { CheckoutPage } from './pages/CheckoutPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { RegisterPage } from './pages/RegisterPage'
@@ -13,8 +13,8 @@ const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
   },
   {
-    path: '/login',
-    element: <LoginPage />,
+    path: '/signin',
+    element: <SigninPage />,
   },
   {
     path: '/register',

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 export type UserDetails = {
-  name: string
+  username: string
 }
 
 const useUserDetails = (token: string, deps?: any[]) => {
@@ -28,9 +28,8 @@ const useUserDetails = (token: string, deps?: any[]) => {
       })
         .then((res) => res.json())
         .then((json) => {
-          if (json?.userDetails?.name) {
-            console.log(json)
-            setUserDetails({name: json.userDetails.name})
+          if (json?.username) {
+            setUserDetails({username: json.username})
           }
           setLoading(false)
         })
