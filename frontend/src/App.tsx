@@ -1,16 +1,11 @@
-import { createContext } from 'react'
-import { RouterProvider } from 'react-router'
-import router from './router'
 import { UserContextProvider } from './contexts/UserContext'
+import { Provider } from './components/ui/provider'
 
-export const AppContext = createContext({ isSignedIn: false })
-
-const App = () => {
-
+const App = ({ children }: { children: any }) => {
   return (
-    <UserContextProvider>
-      <RouterProvider router={router} />
-    </UserContextProvider>
+    <Provider>
+      <UserContextProvider>{children}</UserContextProvider>
+    </Provider>
   )
 }
 

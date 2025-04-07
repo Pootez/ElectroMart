@@ -1,13 +1,9 @@
-import { useContext } from 'react'
-import { UserContext, UserContextType } from '../contexts/UserContext'
+import { AppGrid } from '../components/AppGrid'
 
 export const HomePage = () => {
-  const { userDetails } = useContext(UserContext) as UserContextType
-
   return (
-    <div>
-      HomePage
-      {userDetails && 'Signed in as ' + userDetails.username}
-    </div>
+    <AppGrid>
+      <div>HomePage</div>
+    </AppGrid>
   )
 }

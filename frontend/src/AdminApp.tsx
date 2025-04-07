@@ -1,5 +1,10 @@
+import App from './App'
 import { AdminPage } from './pages/AdminPage'
 
 export const AdminApp = () => {
-  return <AdminPage />
+  return (
+    <App>
+      <AdminPage />
+    </App>
+  )
 }
