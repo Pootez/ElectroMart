@@ -3,6 +3,16 @@ import useLogin from '../effects/useLogin'
 import { UserContext, UserContextType } from '../contexts/UserContext'
 import { useNavigate } from 'react-router'
 import { AppGrid } from '../components/AppGrid'
+import {
+  Button,
+  Card,
+  Field,
+  Fieldset,
+  Input,
+  Stack,
+  VStack,
+} from '@chakra-ui/react'
+import { PasswordInput } from '../components/ui/password-input'
 
 export const SigninPage = () => {
   const [username, setUsername] = useState('')
@@ -26,32 +36,51 @@ export const SigninPage = () => {
 
   return (
     <AppGrid>
-      <div className="flex flex-col gap-2">
-        Sign in
-        <div>
-          Username:
-          <input
-            type="text"
-            onChange={(e) => {
-              setUsername(e.target.value)
-            }}
-          />
-        </div>
-        <div>
-          Password:
-          <input
-            type="text"
-            onChange={(e) => {
-              setPassword(e.target.value)
-            }}
-          />
-        </div>
-        <button onClick={() => {setLoading(!isLoading)}}>
-          Sign in
-        </button>
-        {error && error}
-        {userDetails && userDetails.username}
-      </div>
+      <VStack justifyContent="center" alignItems="center" h="100%">
+        <Card.Root>
+          <Card.Body>
+            <Fieldset.Root size="lg" maxW="lg">
+              <Stack>
+                <Fieldset.Legend>Sign in</Fieldset.Legend>
+              </Stack>
+              <Fieldset.Content>
+                <Field.Root>
+                  <Field.Label>Username</Field.Label>
+                  <Input
+                    name="username"
+                    placeholder="Username"
+                    onChange={(e) => {
+                      setUsername(e.target.value)
+                    }}
+                  />
+                </Field.Root>
+                <Field.Root>
+                  <Field.Label>Password</Field.Label>
+                  <PasswordInput
+                    name="password"
+                    placeholder="Password"
+                    onChange={(e) => {
+                      setPassword(e.target.value)
+                    }}
+                  />
+                </Field.Root>
+              </Fieldset.Content>
+              <Button
+                loading={isLoading}
+                type="submit"
+                variant="subtle"
+                alignSelf="flex-start"
+                onClick={() => {
+                  setLoading(!isLoading)
+                }}
+              >
+                Sign in
+              </Button>
+              {error && error}
+            </Fieldset.Root>
+          </Card.Body>
+        </Card.Root>
+      </VStack>
     </AppGrid>
   )
 }
