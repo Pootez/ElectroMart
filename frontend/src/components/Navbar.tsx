@@ -7,7 +7,7 @@ export const Navbar = () => {
   const navigate = useNavigate()
 
   return (
-    <HStack padding="10px" bg="gray.700" justifyContent="space-between">
+    <HStack padding="10px" bg="secondary" justifyContent="space-between">
       <Button onClick={() => navigate('/')} variant="ghost">
         <Heading>ElectroMart</Heading>
       </Button>

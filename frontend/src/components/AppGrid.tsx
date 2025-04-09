@@ -19,7 +19,7 @@ export const AppGrid = ({
         lg: '200px 1fr',
       }}
       templateRows="50px 1fr"
-      gap={3} height="100vh"
+      gap={3} height="100vh" bg="primary"
     >
       <GridItem area="nav">
         <Navbar />

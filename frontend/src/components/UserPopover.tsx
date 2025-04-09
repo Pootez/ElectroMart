@@ -25,6 +25,8 @@ const UserPopover = () => {
               </Popover.Title>
               {userDetails ? (
                 <Button
+                  colorPalette="cyan"
+                  variant="subtle"
                   onClick={() => {
                     localStorage.setItem('token', '')
                     setToken('')
@@ -34,8 +36,18 @@ const UserPopover = () => {
                 </Button>
               ) : (
                 <>
-                  <Button onClick={() => navigate('/signin')}>Sign in</Button>
-                  <Button onClick={() => navigate('/register')}>
+                  <Button
+                    colorPalette="cyan"
+                    variant="subtle"
+                    onClick={() => navigate('/signin')}
+                  >
+                    Sign in
+                  </Button>
+                  <Button
+                    colorPalette="cyan"
+                    variant="subtle"
+                    onClick={() => navigate('/register')}
+                  >
                     Register
                   </Button>
                 </>
