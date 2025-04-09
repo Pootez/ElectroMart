@@ -4,7 +4,7 @@ export type UserDetails = {
   name: string
 }
 
-const useLogin = (username: string, password: string, deps?: any[]) => {
+const useRegister = (username: string, password: string, deps?: any[]) => {
   const [token, setToken] = useState('')
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -23,28 +23,28 @@ const useLogin = (username: string, password: string, deps?: any[]) => {
       setToken('')
       setError('')
 
-      fetch('/api/auth/login', {
+      fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify({ username: username, password: password }),
       })
-        .then(async (res) => {
-          if (res.ok) {
-            const json = await res.json()
-            if (json?.token) {
-              setToken(json.token)
-            }
-          } else {
-            const errorText = await (await res.blob()).text()
-            setError(errorText)
+      .then(async (res) => {
+        if (res.ok) {
+          const json = await res.json()
+          if (json?.token) {
+            setToken(json.token)
           }
-          setLoading(false)
-        })
-        .catch((err) => {
-          console.log('Error', { err })
-          setError(err.message)
-          setLoading(false)
-        })
+        } else {
+          const errorText = await (await res.blob()).text()
+          setError(errorText)
+        }
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.log('Error', { err })
+        setError(err.message)
+        setLoading(false)
+      })
 
       return () => controller.abort()
     },
@@ -54,4 +54,4 @@ const useLogin = (username: string, password: string, deps?: any[]) => {
   return { token, isLoading, setLoading, error }
 }
 
-export default useLogin
+export default useRegister

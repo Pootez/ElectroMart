@@ -5,15 +5,16 @@ import { fileURLToPath } from 'url'
 import jwt from 'jsonwebtoken'
 import config from 'config'
 import auth from './middleware/auth.js'
-import { users } from './models/users.js'
+import bcrypt from 'bcrypt'
 
-console.log('Key: ', config.get('jwtPrivateKey'))
 if (!config.get('jwtPrivateKey')) {
   throw new Error('FATAL ERROR: jwtPrivateKey is not defined.')
 }
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+
+let users = []
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, './frontend/dist')))
@@ -23,16 +24,33 @@ app.get('/api/auth/userDetails', auth, (req, res) => {
   res.send(req.user)
 })
 
-app.post('/api/auth/login', (req, res) => {
-  const user = users.find(
-    (obj) =>
-      obj.username == req.body.username && obj.username == req.body.password
-  )
-
+app.post('/api/auth/login', async (req, res) => {
+  const user = users.find((obj) => obj.username == req.body.username)
   if (!user) return res.status(400).send('Invalid username or password')
 
+  const validPassword = await bcrypt.compare(req.body.password, user.password)
+  if (!validPassword)
+    return res.status(400).send('Invalid username or password')
+
   const token = jwt.sign(user, config.get('jwtPrivateKey'))
-  res.send({token: token})
+  res.send({ token: token })
+})
+
+app.post('/api/auth/register', async (req, res) => {
+  let user = { username: req.body.username, password: req.body.username }
+  if (!(!!user.username && !!user.password))
+    return res.status(400).send('Missing username or password')
+
+  const alreadyExists = !!users.find((obj) => obj.username == req.body.username)
+  if (alreadyExists) return res.status(400).send('Username is already in use')
+
+  const salt = await bcrypt.genSalt(10)
+  user.password = await bcrypt.hash(user.password, salt)
+
+  users = [...users, user]
+
+  const token = jwt.sign(user, config.get('jwtPrivateKey'))
+  res.send({ token: token })
 })
 
 app.get('/admin', (req, res) => {
