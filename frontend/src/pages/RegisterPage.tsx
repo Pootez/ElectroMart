@@ -1,3 +1,9 @@
+import { AppGrid } from '../components/AppGrid'
+
 export const RegisterPage = () => {
-  return <div>RegisterPage</div>
+  return (
+    <AppGrid>
+      <div>RegisterPage</div>
+    </AppGrid>
+  )
 }

@@ -1,3 +1,9 @@
+import { AppGrid } from '../components/AppGrid'
+
 export const ProfilePage = () => {
-  return <div>ProfilePage</div>
+  return (
+    <AppGrid>
+      <div>ProfilePage</div>
+    </AppGrid>
+  )
 }

@@ -1,3 +1,9 @@
+import { AppGrid } from '../components/AppGrid'
+
 export const CheckoutPage = () => {
-  return <div>CheckoutPage</div>
+  return (
+    <AppGrid>
+      <div>CheckoutPage</div>
+    </AppGrid>
+  )
 }

@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import useLogin from '../effects/useLogin'
 import { UserContext, UserContextType } from '../contexts/UserContext'
 import { useNavigate } from 'react-router'
+import { AppGrid } from '../components/AppGrid'
 
 export const SigninPage = () => {
   const [username, setUsername] = useState('')
@@ -24,31 +25,33 @@ export const SigninPage = () => {
   }, [userDetails])
 
   return (
-    <div className="flex flex-col gap-2">
-      Sign in
-      <div>
-        Username:
-        <input
-          type="text"
-          onChange={(e) => {
-            setUsername(e.target.value)
-          }}
-        />
-      </div>
-      <div>
-        Password:
-        <input
-          type="text"
-          onChange={(e) => {
-            setPassword(e.target.value)
-          }}
-        />
-      </div>
-      <button onClick={() => {setLoading(!isLoading)}}>
+    <AppGrid>
+      <div className="flex flex-col gap-2">
         Sign in
-      </button>
-      {error && error}
-      {userDetails && userDetails.username}
-    </div>
+        <div>
+          Username:
+          <input
+            type="text"
+            onChange={(e) => {
+              setUsername(e.target.value)
+            }}
+          />
+        </div>
+        <div>
+          Password:
+          <input
+            type="text"
+            onChange={(e) => {
+              setPassword(e.target.value)
+            }}
+          />
+        </div>
+        <button onClick={() => {setLoading(!isLoading)}}>
+          Sign in
+        </button>
+        {error && error}
+        {userDetails && userDetails.username}
+      </div>
+    </AppGrid>
   )
 }

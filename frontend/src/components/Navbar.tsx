@@ -1,11 +1,18 @@
-import { Heading, HStack } from '@chakra-ui/react'
+import { Button, Heading, HStack } from '@chakra-ui/react'
 import { ColorModeButton } from './ui/color-mode'
+import UserPopover from './UserPopover'
+import { useNavigate } from 'react-router'
 
 export const Navbar = () => {
+  const navigate = useNavigate()
+
   return (
     <HStack padding="10px" bg="gray.700" justifyContent="space-between">
-      <Heading>ElectroMart</Heading>
+      <Button onClick={() => navigate('/')} variant="ghost">
+        <Heading>ElectroMart</Heading>
+      </Button>
       <HStack>
+        <UserPopover />
         <ColorModeButton />
       </HStack>
     </HStack>
