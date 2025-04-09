@@ -37,7 +37,7 @@ app.post('/api/auth/login', async (req, res) => {
 })
 
 app.post('/api/auth/register', async (req, res) => {
-  let user = { username: req.body.username, password: req.body.username }
+  let user = { username: req.body.username, password: req.body.password }
   if (!(!!user.username && !!user.password))
     return res.status(400).send('Missing username or password')
 
