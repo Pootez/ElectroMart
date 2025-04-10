@@ -1,9 +1,9 @@
 import { AppGrid } from '../components/AppGrid'
 
-export const HomePage = () => {
+export const BrowsePage = () => {
   return (
     <AppGrid>
-      <div>HomePage</div>
+      <div>BrowsePage</div>
     </AppGrid>
   )
 }
