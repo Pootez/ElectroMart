@@ -15,6 +15,11 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 let users = []
+let products = [
+  { id: '1', name: 'Microwave', price: 50 },
+  { id: '2', name: 'Television', price: 200 },
+  { id: '3', name: 'Toaster', price: 30 },
+]
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, './frontend/dist')))
@@ -51,6 +56,10 @@ app.post('/api/auth/register', async (req, res) => {
 
   const token = jwt.sign(user, config.get('jwtPrivateKey'))
   res.send({ token: token })
+})
+
+app.get('/api/products', async (req, res) => {
+  res.send(products)
 })
 
 app.get('/admin', (req, res) => {
