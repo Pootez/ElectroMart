@@ -17,13 +17,19 @@ export const SearchInput = ({
         if (ref.current) onSearch(ref.current.value)
       }}
     >
-      <Group attached w="full" maxW="sm" onSubmit={() => onSearch(searchText)}>
+      <Group
+        attached
+        w="full"
+        maxW="sm"
+        bg="primary"
+        onSubmit={() => onSearch(searchText)}
+      >
         <Input
           ref={ref}
           placeholder="Search"
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <Button variant="surface" type="submit">
+        <Button variant="outline" type="submit">
           <BsSearch />
         </Button>
       </Group>

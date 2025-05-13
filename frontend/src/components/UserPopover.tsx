@@ -1,8 +1,16 @@
-import { Button, IconButton, Popover, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  IconButton,
+  Popover,
+  VStack,
+  Text,
+  Box,
+} from '@chakra-ui/react'
 import { useContext } from 'react'
-import { FaRegUserCircle } from 'react-icons/fa'
+import { FaExternalLinkAlt, FaRegUserCircle } from 'react-icons/fa'
 import { UserContext, UserContextType } from '../contexts/UserContext'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 const UserPopover = () => {
   const { userDetails, setToken } = useContext(UserContext) as UserContextType
@@ -20,8 +28,27 @@ const UserPopover = () => {
           <Popover.Body>
             <Popover.Arrow />
             <VStack>
-              <Popover.Title textStyle="xl" fontWeight="bold" paddingBottom={3}>
-                {userDetails ? userDetails.username : 'Not signed in'}
+              <Popover.Title textStyle="xl" fontWeight="bold" paddingBottom={4}>
+                <VStack lineHeight="10px">
+                  {userDetails ? (
+                    <>
+                      <Text textStyle="xs">Signed in as</Text>
+                      <Text>{userDetails.username}</Text>
+                      <Box paddingTop={2}>
+                        <Link to="/profile">
+                          <Text>
+                            <HStack textStyle="xs" gap="5px">
+                              View Profile
+                              <FaExternalLinkAlt />
+                            </HStack>
+                          </Text>
+                        </Link>
+                      </Box>
+                    </>
+                  ) : (
+                    'Not signed in'
+                  )}
+                </VStack>
               </Popover.Title>
               {userDetails ? (
                 <Button
