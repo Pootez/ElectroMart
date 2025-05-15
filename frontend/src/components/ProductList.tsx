@@ -1,9 +1,10 @@
 import { VStack } from '@chakra-ui/react'
-import useProducts from '../effects/useProducts'
 import ProductCard from './ProductCard'
+import { SearchContext } from '../contexts/SearchContext'
+import { useContext } from 'react'
 
 const ProductList = () => {
-  const { products, isLoading, error } = useProducts()
+  const { products, isLoading, error } = useContext(SearchContext)
 
   return (
     <VStack padding={3} alignItems="stretch">

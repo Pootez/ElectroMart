@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { SearchParamsType } from '../contexts/SearchContext'
 
 export type Product = {
   id: string
@@ -6,7 +7,7 @@ export type Product = {
   price: number
 }
 
-const useProducts = (deps?: any[]) => {
+const useProducts = (searchParams: SearchParamsType, deps?: any[]) => {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -20,7 +21,10 @@ const useProducts = (deps?: any[]) => {
       setProducts([])
       setError('')
 
-      fetch('/api/products', {
+      const apiParams = Object.entries(searchParams).filter(([_, value]) => !!value).map(([key, value]) => `${key}=${value}`).join('&')
+      const endpoint = !apiParams ? '/api/products' : '/api/search?' + apiParams
+
+      fetch(endpoint, {
         method: 'GET',
         headers: { 'Content-type': 'application/json' },
       })
@@ -36,7 +40,7 @@ const useProducts = (deps?: any[]) => {
 
       return () => controller.abort()
     },
-    deps ? [...deps] : []
+    deps ? [...deps, searchParams] : [searchParams]
   )
 
   return { products, isLoading, error }

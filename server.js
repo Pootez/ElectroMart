@@ -62,6 +62,18 @@ app.get('/api/products', async (req, res) => {
   res.send(products)
 })
 
+app.get('/api/search', async (req, res) => {
+  const searchText = req.query.text
+
+  res.send(
+    products.filter(
+      (product) =>
+        !searchText ||
+        product.name.toLowerCase().includes(searchText.toLowerCase())
+    )
+  )
+})
+
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, './frontend/dist/admin.html'))
 })
