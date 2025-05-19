@@ -1,5 +1,6 @@
 import { Box, Card, Image, Text, Button } from '@chakra-ui/react'
 import { Product } from '../effects/useProducts'
+import imageNotFound from '../assets/imageNotFound.png'
 
 const ProductCard = ({
   product,
@@ -12,7 +13,7 @@ const ProductCard = ({
 
   return (
     <Card.Root flexDirection="row" overflow="hidden" variant="elevated">
-          <Image width="150px" objectFit="cover" src='../public/imageNotFound.png' />
+      <Image width="150px" objectFit="cover" src={imageNotFound} />
       <Box>
         <Card.Body>
           <Card.Title>{product.name}</Card.Title>

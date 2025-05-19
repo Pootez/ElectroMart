@@ -11,6 +11,7 @@ import useProduct from '../effects/useProduct'
 import { LuMinus, LuPlus } from 'react-icons/lu'
 import { useContext } from 'react'
 import { CartContext } from '../contexts/CartContext'
+import imageNotFound from '../assets/imageNotFound.png'
 
 export const CartItem = ({
   productId,
@@ -25,7 +26,7 @@ export const CartItem = ({
 
   return (
     <Card.Root flexDirection="row" overflow="hidden" variant="elevated">
-      <Image width="150px" objectFit="cover" src='../public/imageNotFound.png' />
+      <Image width="150px" objectFit="cover" src={imageNotFound} />
       <Box>
         <Card.Body>
           <Card.Title>{product.name}</Card.Title>
