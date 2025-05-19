@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken'
 import config from 'config'
 import auth from './middleware/auth.js'
 import bcrypt from 'bcrypt'
+import pool from './startup/db.js'
 
 if (!config.get('jwtPrivateKey')) {
   throw new Error('FATAL ERROR: jwtPrivateKey is not defined.')
