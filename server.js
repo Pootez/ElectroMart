@@ -59,6 +59,11 @@ app.post('/api/auth/register', async (req, res) => {
   res.send({ token: token })
 })
 
+app.get('/api/product/:productId', async (req, res) => {
+  const product = products.find(product => product.id == req.params.productId)
+  res.send(product || null)
+})
+
 app.get('/api/products', async (req, res) => {
   res.send(products)
 })

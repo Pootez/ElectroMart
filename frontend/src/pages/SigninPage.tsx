@@ -13,8 +13,18 @@ export const SigninPage = ({ type = 'signin' }: { type?: string }) => {
           <Card.Body>
             <Tabs.Root value={type}>
               <Tabs.List>
-                <Tabs.Trigger value="signin" onClick={() => navigate('/signin')}>Sign in</Tabs.Trigger>
-                <Tabs.Trigger value="register" onClick={() => navigate('/register')}>Register</Tabs.Trigger>
+                <Tabs.Trigger
+                  value="signin"
+                  onClick={() => navigate('/signin')}
+                >
+                  Sign in
+                </Tabs.Trigger>
+                <Tabs.Trigger
+                  value="register"
+                  onClick={() => navigate('/register')}
+                >
+                  Register
+                </Tabs.Trigger>
               </Tabs.List>
               <Tabs.Content value="signin">
                 <SigninFieldset />

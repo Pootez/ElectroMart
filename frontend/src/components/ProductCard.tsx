@@ -1,7 +1,13 @@
 import { Box, Card, Skeleton, Text, Button } from '@chakra-ui/react'
 import { Product } from '../effects/useProducts'
 
-const ProductCard = ({ product }: { product?: Product }) => {
+const ProductCard = ({
+  product,
+  actions = [],
+}: {
+  product?: Product
+  actions?: { title: string; action: (item: Product) => void }[]
+}) => {
   if (!product) return
 
   return (
@@ -10,14 +16,29 @@ const ProductCard = ({ product }: { product?: Product }) => {
       <Box>
         <Card.Body>
           <Card.Title>{product.name}</Card.Title>
-          <Card.Description>Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien vitae pellentesque sem.</Card.Description>
-          <Text textStyle="2xl" fontWeight="medium" letterSpacing="tight" mt="2">
-          {`$${product.price}`}
-        </Text>
+          <Card.Description>
+            Lorem ipsum dolor sit amet consectetur adipiscing elit quisque
+            faucibus ex sapien vitae pellentesque sem.
+          </Card.Description>
+          <Text
+            textStyle="2xl"
+            fontWeight="medium"
+            letterSpacing="tight"
+            mt="2"
+          >
+            {`$${product.price}`}
+          </Text>
         </Card.Body>
         <Card.Footer gap="2">
-          <Button variant="solid">Buy now</Button>
-          <Button variant="ghost">Add to cart</Button>
+          {actions.map((action, idx) => (
+            <Button
+              key={idx}
+              variant="solid"
+              onClick={() => action.action(product)}
+            >
+              {action.title}
+            </Button>
+          ))}
         </Card.Footer>
       </Box>
     </Card.Root>

@@ -1,0 +1,57 @@
+import {
+  Button,
+  CloseButton,
+  Drawer,
+  IconButton,
+  Portal,
+} from '@chakra-ui/react'
+import { useContext, useState } from 'react'
+import { FiShoppingCart } from 'react-icons/fi'
+import { CartContext } from '../contexts/CartContext'
+import { CartItem } from './CartItem'
+import { useNavigate } from 'react-router'
+
+const CartDrawer = () => {
+  const [open, setOpen] = useState(false)
+  const { cartList, setCartList } = useContext(CartContext)
+  const navigate = useNavigate()
+
+  return (
+    <Drawer.Root size="lg" open={open} onOpenChange={(e) => setOpen(e.open)}>
+      <Drawer.Trigger asChild>
+        <IconButton variant="ghost">
+          <FiShoppingCart />
+        </IconButton>
+      </Drawer.Trigger>
+      <Portal>
+        <Drawer.Backdrop />
+        <Drawer.Positioner>
+          <Drawer.Content>
+            <Drawer.Header>
+              <Drawer.Title>Cart</Drawer.Title>
+            </Drawer.Header>
+            <Drawer.Body>
+              {cartList.map((item) => (
+                <CartItem
+                  key={item.id}
+                  productId={item.id}
+                  count={item.count}
+                />
+              ))}
+            </Drawer.Body>
+            <Drawer.Footer>
+              <Button variant="outline" onClick={() => setCartList([])}>
+                Clear Cart
+              </Button>
+              <Button onClick={() => navigate('/checkout')}>Checkout</Button>
+            </Drawer.Footer>
+            <Drawer.CloseTrigger asChild>
+              <CloseButton size="sm" />
+            </Drawer.CloseTrigger>
+          </Drawer.Content>
+        </Drawer.Positioner>
+      </Portal>
+    </Drawer.Root>
+  )
+}
+export default CartDrawer

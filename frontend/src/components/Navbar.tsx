@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 import { SearchInput } from './SearchInput'
 import { SearchContext } from '../contexts/SearchContext'
 import { useContext } from 'react'
+import CartDrawer from './CartDrawer'
 
 export const Navbar = () => {
   const navigate = useNavigate()
@@ -21,6 +22,7 @@ export const Navbar = () => {
         }}
       />
       <HStack>
+        <CartDrawer />
         <UserPopover />
         <ColorModeButton />
       </HStack>
