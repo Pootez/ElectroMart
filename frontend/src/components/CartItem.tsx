@@ -20,7 +20,7 @@ export const CartItem = ({
   productId: string
   count: number
 }) => {
-  const { product, isLoading, error } = useProduct(productId)
+  const { product } = useProduct(productId)
   const { cartList, setCartList } = useContext(CartContext)
   if (!product) return
 
