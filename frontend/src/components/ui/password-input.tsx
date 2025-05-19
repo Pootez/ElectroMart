@@ -20,6 +20,7 @@ import * as React from "react"
 import { LuEye, LuEyeOff } from "react-icons/lu"
 
 export interface PasswordVisibilityProps {
+  disableToggle?: boolean
   defaultVisible?: boolean
   visible?: boolean
   onVisibleChange?: (visible: boolean) => void
@@ -38,6 +39,7 @@ export const PasswordInput = React.forwardRef<
 >(function PasswordInput(props, ref) {
   const {
     rootProps,
+    disableToggle,
     defaultVisible,
     visible: visibleProp,
     onVisibleChange,
@@ -55,7 +57,7 @@ export const PasswordInput = React.forwardRef<
 
   return (
     <InputGroup
-      endElement={
+      endElement={!disableToggle &&
         <VisibilityTrigger
           disabled={rest.disabled}
           onPointerDown={(e) => {

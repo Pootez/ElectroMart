@@ -4,29 +4,33 @@ export type UserDetails = {
   name: string
 }
 
-const useLogin = (username: string, password: string, deps?: any[]) => {
+export type LoginData = {
+  username: string
+  password: string
+}
+
+const useLogin = (data?: LoginData, deps?: any[]) => {
   const [token, setToken] = useState('')
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(
     () => {
-      if (!isLoading) return
-
-      if (!username || password) {
-        setError('Missing username or password')
-        setToken('')
-      }
-
       const controller = new AbortController()
 
+      if (!data) return
+
+      setLoading(true)
       setToken('')
       setError('')
 
       fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ username: username, password: password }),
+        body: JSON.stringify({
+          username: data.username,
+          password: data.password,
+        }),
       })
         .then(async (res) => {
           if (res.ok) {
@@ -48,10 +52,10 @@ const useLogin = (username: string, password: string, deps?: any[]) => {
 
       return () => controller.abort()
     },
-    deps ? [...deps, isLoading] : [isLoading]
+    deps ? [...deps, data] : [data]
   )
 
-  return { token, isLoading, setLoading, error }
+  return { token, isLoading, error }
 }
 
 export default useLogin
