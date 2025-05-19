@@ -2,11 +2,16 @@ import { createContext, useState } from 'react'
 import useUserDetails, { UserDetails } from '../effects/useUserDetails'
 
 export type UserContextType = {
-  userDetails: UserDetails | null
+  userDetails: UserDetails | undefined
+  token: string
   setToken: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const UserContext = createContext<UserContextType | null>(null)
+export const UserContext = createContext<UserContextType>({
+  userDetails: undefined,
+  token: '',
+  setToken: () => {},
+})
 
 export const UserContextProvider = ({ children }: { children: any }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || '')
@@ -14,7 +19,7 @@ export const UserContextProvider = ({ children }: { children: any }) => {
   const { userDetails } = useUserDetails(token)
 
   return (
-    <UserContext.Provider value={{ userDetails: userDetails, setToken }}>
+    <UserContext.Provider value={{ userDetails, token, setToken }}>
       {children}
     </UserContext.Provider>
   )

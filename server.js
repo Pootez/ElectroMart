@@ -22,6 +22,8 @@ let products = [
   { id: '3', name: 'Toaster', price: 30 },
 ]
 
+let orders = []
+
 app.use(express.json())
 app.use(express.static(path.join(__dirname, './frontend/dist')))
 
@@ -57,6 +59,13 @@ app.post('/api/auth/register', async (req, res) => {
 
   const token = jwt.sign(user, config.get('jwtPrivateKey'))
   res.send({ token: token })
+})
+
+app.post('/api/auth/checkout', auth, async (req, res) => {
+  if (!req.body.items) return res.status(400).send('Missing order items')
+  const newOrder = {orderId: orders.length + 1, userId: req.user.id, items: req.items}
+  orders = [...orders, newOrder]
+  res.send(newOrder)
 })
 
 app.get('/api/product/:productId', async (req, res) => {

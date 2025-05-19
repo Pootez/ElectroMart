@@ -5,7 +5,7 @@ export type UserDetails = {
 }
 
 const useUserDetails = (token: string, deps?: any[]) => {
-  const [userDetails, setUserDetails] = useState<UserDetails | null>(null)
+  const [userDetails, setUserDetails] = useState<UserDetails | undefined>()
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -13,13 +13,13 @@ const useUserDetails = (token: string, deps?: any[]) => {
     () => {
       if (!token) {
         setError('No token provided')
-        setUserDetails(null)
+        setUserDetails(undefined)
       }
 
       const controller = new AbortController()
 
       setLoading(true)
-      setUserDetails(null)
+      setUserDetails(undefined)
       setError('')
 
       fetch('/api/auth/userDetails', {

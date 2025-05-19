@@ -9,11 +9,11 @@ import {
 } from '@chakra-ui/react'
 import { useContext } from 'react'
 import { FaExternalLinkAlt, FaRegUserCircle } from 'react-icons/fa'
-import { UserContext, UserContextType } from '../contexts/UserContext'
+import { UserContext } from '../contexts/UserContext'
 import { Link, useNavigate } from 'react-router'
 
 const UserPopover = () => {
-  const { userDetails, setToken } = useContext(UserContext) as UserContextType
+  const { userDetails, setToken } = useContext(UserContext)
   const navigate = useNavigate()
 
   return (
@@ -36,12 +36,10 @@ const UserPopover = () => {
                       <Text>{userDetails.username}</Text>
                       <Box paddingTop={2}>
                         <Link to="/profile">
-                          <Text>
-                            <HStack textStyle="xs" gap="5px">
-                              View Profile
-                              <FaExternalLinkAlt />
-                            </HStack>
-                          </Text>
+                          <HStack textStyle="xs" gap="5px">
+                            View Profile
+                            <FaExternalLinkAlt />
+                          </HStack>
                         </Link>
                       </Box>
                     </>
