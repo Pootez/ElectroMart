@@ -4,7 +4,7 @@ import {
   HStack,
   IconButton,
   NumberInput,
-  Skeleton,
+  Image,
   Text,
 } from '@chakra-ui/react'
 import useProduct from '../effects/useProduct'
@@ -24,8 +24,8 @@ export const CartItem = ({
   if (!product) return
 
   return (
-    <Card.Root flexDirection="row" overflow="hidden">
-      <Skeleton width="150px" objectFit="cover" />
+    <Card.Root flexDirection="row" overflow="hidden" variant="elevated">
+      <Image width="150px" objectFit="cover" src='../public/imageNotFound.png' />
       <Box>
         <Card.Body>
           <Card.Title>{product.name}</Card.Title>

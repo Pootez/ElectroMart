@@ -4,6 +4,7 @@ import {
   Drawer,
   IconButton,
   Portal,
+  VStack,
 } from '@chakra-ui/react'
 import { useContext, useState } from 'react'
 import { FiShoppingCart } from 'react-icons/fi'
@@ -31,13 +32,15 @@ const CartDrawer = () => {
               <Drawer.Title>Cart</Drawer.Title>
             </Drawer.Header>
             <Drawer.Body>
-              {cartList.map((item) => (
-                <CartItem
-                  key={item.id}
-                  productId={item.id}
-                  count={item.count}
-                />
-              ))}
+              <VStack>
+                {cartList.map((item) => (
+                  <CartItem
+                    key={item.id}
+                    productId={item.id}
+                    count={item.count}
+                  />
+                ))}
+              </VStack>
             </Drawer.Body>
             <Drawer.Footer>
               <Button variant="outline" onClick={() => setCartList([])}>
