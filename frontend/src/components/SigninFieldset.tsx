@@ -3,13 +3,13 @@ import { PasswordInput } from './ui/password-input'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import useLogin, { LoginData } from '../effects/useLogin'
-import { UserContext, UserContextType } from '../contexts/UserContext'
+import { UserContext } from '../contexts/UserContext'
 import { useForm } from 'react-hook-form'
 
 const SigninFieldset = () => {
   const [loginData, setLoginData] = useState<LoginData | undefined>()
   const { token, isLoading, error } = useLogin(loginData)
-  const { userDetails, setToken } = useContext(UserContext) as UserContextType
+  const { userDetails, setToken } = useContext(UserContext)
   const navigate = useNavigate()
 
   const {
@@ -24,7 +24,7 @@ const SigninFieldset = () => {
 
     localStorage.setItem('token', token)
     setToken(token)
-  }, [token])
+  }, [token, isLoading])
 
   useEffect(() => {
     if (!userDetails) return
@@ -39,13 +39,13 @@ const SigninFieldset = () => {
     >
       <Fieldset.Root invalid size="lg" maxW="lg">
         <Fieldset.Content>
-          <Field.Root invalid={!!errors.username}>
-            <Field.Label>Username</Field.Label>
+          <Field.Root invalid={!!errors.email}>
+            <Field.Label>Email</Field.Label>
             <Input
-              {...register('username', { required: 'Username is required.' })}
-              placeholder="Username"
+              {...register('email', { required: 'Email is required.' })}
+              placeholder="Email"
             />
-            <Field.ErrorText>{errors.username?.message}</Field.ErrorText>
+            <Field.ErrorText>{errors.email?.message}</Field.ErrorText>
           </Field.Root>
           <Field.Root invalid={!!errors.password}>
             <Field.Label>Password</Field.Label>

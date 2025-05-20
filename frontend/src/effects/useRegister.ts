@@ -5,11 +5,10 @@ export type UserDetails = {
 }
 
 export type RegisterData = {
-  username: string
+  email: string
   firstName: string
   lastName: string
-  email: string
-  phone: number
+  phoneNumber: number
   password: string
   confirmPassword: string
 }
@@ -31,7 +30,7 @@ const useRegister = (data?: RegisterData, deps?: any[]) => {
       fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({ username: data.username, password: data.password }),
+        body: JSON.stringify(data),
       })
         .then(async (res) => {
           if (res.ok) {

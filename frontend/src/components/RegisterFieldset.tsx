@@ -3,13 +3,13 @@ import { PasswordInput } from './ui/password-input'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import useRegister, { RegisterData } from '../effects/useRegister'
-import { UserContext, UserContextType } from '../contexts/UserContext'
+import { UserContext } from '../contexts/UserContext'
 import { useForm } from 'react-hook-form'
 
 const RegisterFieldset = () => {
   const [registerData, setRegisterData] = useState<RegisterData | undefined>()
   const { token, isLoading, error } = useRegister(registerData)
-  const { userDetails, setToken } = useContext(UserContext) as UserContextType
+  const { userDetails, setToken } = useContext(UserContext)
   const navigate = useNavigate()
 
   const {
@@ -25,7 +25,7 @@ const RegisterFieldset = () => {
 
     localStorage.setItem('token', token)
     setToken(token)
-  }, [token])
+  }, [token, isLoading])
 
   useEffect(() => {
     if (!userDetails) return
@@ -36,13 +36,13 @@ const RegisterFieldset = () => {
     <form onSubmit={handleSubmit((data) => {setRegisterData(data)})}>
       <Fieldset.Root size="lg" maxW="lg">
         <Fieldset.Content>
-          <Field.Root invalid={!!errors.username}>
-            <Field.Label>Username</Field.Label>
+          <Field.Root invalid={!!errors.email}>
+            <Field.Label>Email</Field.Label>
             <Input
-              {...register('username', { required: 'Username is required.' })}
-              placeholder="Username"
+              {...register('email', { required: 'Email is required.' })}
+              placeholder="me@example.com"
             />
-            <Field.ErrorText>{errors.username?.message}</Field.ErrorText>
+            <Field.ErrorText>{errors.email?.message}</Field.ErrorText>
           </Field.Root>
           <Group w="full" attached>
             <Field.Root invalid={!!errors.firstName}>
@@ -64,21 +64,13 @@ const RegisterFieldset = () => {
             <Field.ErrorText>{errors.lastName?.message}</Field.ErrorText>
             </Field.Root>
           </Group>
-          <Field.Root invalid={!!errors.email}>
-            <Field.Label>Email</Field.Label>
-            <Input
-              {...register('email', { required: 'Email is required.' })}
-              placeholder="me@example.com"
-            />
-            <Field.ErrorText>{errors.email?.message}</Field.ErrorText>
-          </Field.Root>
-          <Field.Root invalid={!!errors.phone}>
+          <Field.Root invalid={!!errors.phoneNumber}>
             <Field.Label>Phone number</Field.Label>
             <Input
-              {...register('phone', { required: 'Phone number is required.' })}
+              {...register('phoneNumber', { required: 'Phone number is required.' })}
               placeholder="111 22 333"
             />
-            <Field.ErrorText>{errors.phone?.message}</Field.ErrorText>
+            <Field.ErrorText>{errors.phoneNumber?.message}</Field.ErrorText>
           </Field.Root>
           <Field.Root invalid={!!errors.password}>
             <Field.Label>Password</Field.Label>

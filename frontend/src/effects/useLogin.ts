@@ -5,7 +5,7 @@ export type UserDetails = {
 }
 
 export type LoginData = {
-  username: string
+  email: string
   password: string
 }
 
@@ -27,10 +27,7 @@ const useLogin = (data?: LoginData, deps?: any[]) => {
       fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify({
-          username: data.username,
-          password: data.password,
-        }),
+        body: JSON.stringify(data),
       })
         .then(async (res) => {
           if (res.ok) {

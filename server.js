@@ -20,9 +20,18 @@ require('./startup/initDB.js').checkAndInitDB()
 app.use(express.json())
 app.use(express.static(path.join(__dirname, './frontend/dist')))
 
-app.get('/api/auth/userDetails', auth, (req, res) => {
-  res.status(200)
-  res.send(req.user)
+app.get('/api/auth/userDetails', auth, async (req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT email, firstName, lastName, phoneNumber FROM users WHERE userID = $1`,
+      [req.user.userID]
+    )
+    const userDetails = result.rows[0]
+    res.send({userDetails})
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Internal server error')
+  }
 })
 
 app.post('/api/auth/register', async (req, res) => {

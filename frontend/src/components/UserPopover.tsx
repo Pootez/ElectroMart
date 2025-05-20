@@ -33,7 +33,7 @@ const UserPopover = () => {
                   {userDetails ? (
                     <>
                       <Text textStyle="xs">Signed in as</Text>
-                      <Text>{userDetails.username}</Text>
+                      <Text>{userDetails.firstname + ' ' + userDetails.lastname}</Text>
                       <Box paddingTop={2}>
                         <Link to="/profile">
                           <HStack textStyle="xs" gap="5px">
