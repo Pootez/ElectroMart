@@ -1,6 +1,7 @@
-import { Box, Card, Image, Text, Button } from '@chakra-ui/react'
+import { Box, Card, Image, Button } from '@chakra-ui/react'
 import { Product } from '../effects/useProducts'
 import imageNotFound from '../assets/imageNotFound.png'
+import { ProductCardBody } from './ProductCardBody'
 
 const ProductCard = ({
   product,
@@ -15,21 +16,7 @@ const ProductCard = ({
     <Card.Root flexDirection="row" overflow="hidden" variant="elevated">
       <Image width="150px" objectFit="cover" src={imageNotFound} />
       <Box>
-        <Card.Body>
-          <Card.Title>{product.name}</Card.Title>
-          <Card.Description>
-            Lorem ipsum dolor sit amet consectetur adipiscing elit quisque
-            faucibus ex sapien vitae pellentesque sem.
-          </Card.Description>
-          <Text
-            textStyle="2xl"
-            fontWeight="medium"
-            letterSpacing="tight"
-            mt="2"
-          >
-            {`$${product.price}`}
-          </Text>
-        </Card.Body>
+        <ProductCardBody product={product} />
         <Card.Footer gap="2">
           {actions.map((action, idx) => (
             <Button

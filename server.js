@@ -6,6 +6,8 @@ const config = require('config')
 const auth = require('./middleware/auth.js')
 const bcrypt = require('bcrypt')
 const db = require('./startup/db.js')
+const { productSelectionSQL, mapProductRow } = require('./utils/productUtils')
+
 
 if (!config.get('jwtPrivateKey')) {
   throw new Error('FATAL ERROR: jwtPrivateKey is not defined.')
@@ -27,7 +29,7 @@ app.get('/api/auth/userDetails', auth, async (req, res) => {
       [req.user.userID]
     )
     const userDetails = result.rows[0]
-    res.send({userDetails})
+    res.send({ userDetails })
   } catch (err) {
     console.error(err)
     res.status(500).send('Internal server error')
@@ -56,11 +58,14 @@ app.post('/api/auth/register', async (req, res) => {
     )
 
     const user = result.rows[0]
-    const token = jwt.sign({
+    const token = jwt.sign(
+      {
         userID: user.userid,
         email: user.email,
         isAdmin: user.isadmin,
-      }, config.get('jwtPrivateKey'))
+      },
+      config.get('jwtPrivateKey')
+    )
     res.send({ token })
   } catch (err) {
     console.error(err)
@@ -131,10 +136,14 @@ app.post('/api/auth/checkout', auth, async (req, res) => {
 
 app.get('/api/product/:productId', async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM product WHERE ID = $1', [
-      req.params.productId,
-    ])
-    res.send(result.rows[0] || null)
+    const result = await db.query(
+      `
+      ${productSelectionSQL}
+      WHERE p.ID = $1
+      `,
+      [req.params.productId]
+    )
+    res.send(result.rows[0] ? mapProductRow(result.rows[0]) : null)
   } catch (err) {
     console.error(err)
     res.status(500).send('Failed to fetch product')
@@ -143,8 +152,8 @@ app.get('/api/product/:productId', async (req, res) => {
 
 app.get('/api/products', async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM product')
-    res.send(result.rows)
+    const result = await db.query(productSelectionSQL)
+    res.send(result.rows.map(mapProductRow))
   } catch (err) {
     console.error(err)
     res.status(500).send('Failed to fetch products')
@@ -155,10 +164,13 @@ app.get('/api/search', async (req, res) => {
   const text = req.query.text || ''
   try {
     const result = await db.query(
-      'SELECT * FROM product WHERE LOWER(name) LIKE $1',
+      `
+      ${productSelectionSQL}
+      WHERE LOWER(p.name) LIKE $1
+      `,
       [`%${text.toLowerCase()}%`]
     )
-    res.send(result.rows)
+    res.send(result.rows.map(mapProductRow))
   } catch (err) {
     console.error(err)
     res.status(500).send('Search failed')

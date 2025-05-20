@@ -5,6 +5,10 @@ export type Product = {
   id: string
   name: string
   price: number
+  description: string
+  stockquantity: number
+  brand: { id: number; name: string }
+  category: { id: number; name: string }
 }
 
 const useProducts = (searchParams: SearchParamsType, deps?: any[]) => {
@@ -14,14 +18,16 @@ const useProducts = (searchParams: SearchParamsType, deps?: any[]) => {
 
   useEffect(
     () => {
-
       const controller = new AbortController()
 
       setLoading(true)
       setProducts([])
       setError('')
 
-      const apiParams = Object.entries(searchParams).filter(([_, value]) => !!value).map(([key, value]) => `${key}=${value}`).join('&')
+      const apiParams = Object.entries(searchParams)
+        .filter(([_, value]) => !!value)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('&')
       const endpoint = !apiParams ? '/api/products' : '/api/search?' + apiParams
 
       fetch(endpoint, {
