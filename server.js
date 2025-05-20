@@ -56,7 +56,11 @@ app.post('/api/auth/register', async (req, res) => {
     )
 
     const user = result.rows[0]
-    const token = jwt.sign(user, config.get('jwtPrivateKey'))
+    const token = jwt.sign({
+        userID: user.userid,
+        email: user.email,
+        isAdmin: user.isadmin,
+      }, config.get('jwtPrivateKey'))
     res.send({ token })
   } catch (err) {
     console.error(err)
