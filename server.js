@@ -1,28 +1,21 @@
-import express from 'express'
+const express = require('express')
 const app = express()
-import path from 'path'
-import { fileURLToPath } from 'url'
-import jwt from 'jsonwebtoken'
-import config from 'config'
-import auth from './middleware/auth.js'
-import bcrypt from 'bcrypt'
-import pool from './startup/db.js'
+const path = require('path')
+const jwt = require('jsonwebtoken')
+const config = require('config')
+const auth = require('./middleware/auth.js')
+const bcrypt = require('bcrypt')
+const db = require('./startup/db.js')
 
 if (!config.get('jwtPrivateKey')) {
   throw new Error('FATAL ERROR: jwtPrivateKey is not defined.')
 }
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+if (config.get('jwtPrivateKey') === 'dev-jwt-key') {
+  console.warn('WARNING: Using default dev JWT key.')
+}
 
-let users = []
-let products = [
-  { id: '1', name: 'Microwave', price: 50 },
-  { id: '2', name: 'Television', price: 200 },
-  { id: '3', name: 'Toaster', price: 30 },
-]
-
-let orders = []
+require('./startup/initDB.js').checkAndInitDB()
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, './frontend/dist')))
@@ -32,61 +25,131 @@ app.get('/api/auth/userDetails', auth, (req, res) => {
   res.send(req.user)
 })
 
-app.post('/api/auth/login', async (req, res) => {
-  const user = users.find((obj) => obj.username == req.body.username)
-  if (!user) return res.status(400).send('Invalid username or password')
+app.post('/api/auth/register', async (req, res) => {
+  const { email, password, firstName, lastName, phoneNumber } = req.body
+  if (!(email && password && firstName && lastName && phoneNumber))
+    return res.status(400).send('Missing fields')
 
-  const validPassword = await bcrypt.compare(req.body.password, user.password)
-  if (!validPassword)
-    return res.status(400).send('Invalid username or password')
+  try {
+    const exists = await db.query('SELECT * FROM users WHERE email = $1', [
+      email,
+    ])
+    if (exists.rows.length > 0)
+      return res.status(400).send('Email already registered')
 
-  const token = jwt.sign(user, config.get('jwtPrivateKey'))
-  res.send({ token: token })
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
+    const result = await db.query(
+      `INSERT INTO users (email, password, firstName, lastName, phoneNumber, isAdmin)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING userID, email, isAdmin`,
+      [email, hashedPassword, firstName, lastName, phoneNumber, false]
+    )
+
+    const user = result.rows[0]
+    const token = jwt.sign(user, config.get('jwtPrivateKey'))
+    res.send({ token })
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Internal server error')
+  }
 })
 
-app.post('/api/auth/register', async (req, res) => {
-  let user = { username: req.body.username, password: req.body.password }
-  if (!(!!user.username && !!user.password))
-    return res.status(400).send('Missing username or password')
+app.post('/api/auth/login', async (req, res) => {
+  const { email, password } = req.body
 
-  const alreadyExists = !!users.find((obj) => obj.username == req.body.username)
-  if (alreadyExists) return res.status(400).send('Username is already in use')
+  try {
+    const result = await db.query('SELECT * FROM users WHERE email = $1', [
+      email,
+    ])
+    const user = result.rows[0]
+    if (!user) return res.status(400).send('Invalid email or password')
 
-  const salt = await bcrypt.genSalt(10)
-  user.password = await bcrypt.hash(user.password, salt)
+    const validPassword = await bcrypt.compare(password, user.password)
+    if (!validPassword) return res.status(400).send('Invalid email or password')
 
-  users = [...users, user]
+    const token = jwt.sign(
+      {
+        userID: user.userid,
+        email: user.email,
+        isAdmin: user.isadmin,
+      },
+      config.get('jwtPrivateKey')
+    )
 
-  const token = jwt.sign(user, config.get('jwtPrivateKey'))
-  res.send({ token: token })
+    res.send({ token })
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Internal server error')
+  }
 })
 
 app.post('/api/auth/checkout', auth, async (req, res) => {
-  if (!req.body.items) return res.status(400).send('Missing order items')
-  const newOrder = {orderId: orders.length + 1, userId: req.user.id, items: req.items}
-  orders = [...orders, newOrder]
-  res.send(newOrder)
+  const { items, address } = req.body
+  if (!items?.length || !address)
+    return res.status(400).send('Missing order items or address')
+
+  try {
+    const totalAmount = items.reduce((sum, item) => sum + item.subtotal, 0)
+
+    const result = await db.query(
+      `INSERT INTO orders (userID, totalAmount, orderDate, address, status)
+       VALUES ($1, $2, NOW(), $3, 'pending')
+       RETURNING ID`,
+      [req.user.userID, totalAmount, address]
+    )
+
+    const orderId = result.rows[0].id
+
+    for (const item of items) {
+      await db.query(
+        `INSERT INTO orderItem (orderID, productID, quantity, subtotal)
+         VALUES ($1, $2, $3, $4)`,
+        [orderId, item.productID, item.quantity, item.subtotal]
+      )
+    }
+
+    res.send({ orderId })
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Order failed')
+  }
 })
 
 app.get('/api/product/:productId', async (req, res) => {
-  const product = products.find(product => product.id == req.params.productId)
-  res.send(product || null)
+  try {
+    const result = await db.query('SELECT * FROM product WHERE ID = $1', [
+      req.params.productId,
+    ])
+    res.send(result.rows[0] || null)
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Failed to fetch product')
+  }
 })
 
 app.get('/api/products', async (req, res) => {
-  res.send(products)
+  try {
+    const result = await db.query('SELECT * FROM product')
+    res.send(result.rows)
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Failed to fetch products')
+  }
 })
 
 app.get('/api/search', async (req, res) => {
-  const searchText = req.query.text
-
-  res.send(
-    products.filter(
-      (product) =>
-        !searchText ||
-        product.name.toLowerCase().includes(searchText.toLowerCase())
+  const text = req.query.text || ''
+  try {
+    const result = await db.query(
+      'SELECT * FROM product WHERE LOWER(name) LIKE $1',
+      [`%${text.toLowerCase()}%`]
     )
-  )
+    res.send(result.rows)
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Search failed')
+  }
 })
 
 app.get('/admin', (req, res) => {
