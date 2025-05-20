@@ -1,5 +1,5 @@
 import { Box, Card, Image, Button } from '@chakra-ui/react'
-import { Product } from '../effects/useProducts'
+import { Product } from '../hooks/useProducts'
 import imageNotFound from '../assets/imageNotFound.png'
 import { ProductCardBody } from './ProductCardBody'
 

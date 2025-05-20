@@ -5,23 +5,21 @@ import {
   IconButton,
   NumberInput,
   Image,
-  Text,
 } from '@chakra-ui/react'
-import useProduct from '../effects/useProduct'
 import { LuMinus, LuPlus } from 'react-icons/lu'
 import { useContext } from 'react'
 import { CartContext } from '../contexts/CartContext'
 import imageNotFound from '../assets/imageNotFound.png'
 import { ProductCardBody } from './ProductCardBody'
+import { Product } from '../hooks/useProducts'
 
 export const CartItem = ({
-  productId,
+  product,
   count,
 }: {
-  productId: string
+  product?: Product
   count: number
 }) => {
-  const { product } = useProduct(productId)
   const { cartList, setCartList } = useContext(CartContext)
   if (!product) return
 

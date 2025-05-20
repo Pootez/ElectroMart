@@ -11,10 +11,12 @@ import { FiShoppingCart } from 'react-icons/fi'
 import { CartContext } from '../contexts/CartContext'
 import { CartItem } from './CartItem'
 import { useNavigate } from 'react-router'
+import { useCartProductList } from '../hooks/useCartProductList'
 
 const CartDrawer = () => {
   const [open, setOpen] = useState(false)
   const { cartList, setCartList } = useContext(CartContext)
+  const cartProductList = useCartProductList(cartList)
   const navigate = useNavigate()
 
   return (
@@ -33,10 +35,10 @@ const CartDrawer = () => {
             </Drawer.Header>
             <Drawer.Body>
               <VStack>
-                {cartList.map((item) => (
+                {cartProductList.map((item) => (
                   <CartItem
-                    key={item.id}
-                    productId={item.id}
+                    key={item.product?.id}
+                    product={item.product}
                     count={item.count}
                   />
                 ))}

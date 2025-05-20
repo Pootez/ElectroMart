@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react'
-import useProducts, { Product } from '../effects/useProducts'
+import useProducts, { Product } from '../hooks/useProducts'
 
 export type SearchParamsType = {
   text: string

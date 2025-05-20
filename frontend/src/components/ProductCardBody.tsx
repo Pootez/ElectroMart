@@ -1,5 +1,5 @@
 import { Badge, Card, HStack, Text } from '@chakra-ui/react'
-import { Product } from '../effects/useProducts'
+import { Product } from '../hooks/useProducts'
 
 export const ProductCardBody = ({ product }: { product: Product }) => {
     const {name, price, description, stockquantity: stock, brand, category } = product

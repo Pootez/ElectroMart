@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react'
-import useUserDetails, { UserDetails } from '../effects/useUserDetails'
+import useUserDetails, { UserDetails } from '../hooks/useUserDetails'
 
 export type UserContextType = {
   userDetails: UserDetails | undefined

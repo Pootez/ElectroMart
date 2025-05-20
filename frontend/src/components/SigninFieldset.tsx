@@ -2,7 +2,7 @@ import { Button, Field, Fieldset, Input } from '@chakra-ui/react'
 import { PasswordInput } from './ui/password-input'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import useLogin, { LoginData } from '../effects/useLogin'
+import useLogin, { LoginData } from '../hooks/useLogin'
 import { UserContext } from '../contexts/UserContext'
 import { useForm } from 'react-hook-form'
 

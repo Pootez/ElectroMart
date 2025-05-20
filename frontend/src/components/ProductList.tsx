@@ -2,7 +2,7 @@ import { VStack } from '@chakra-ui/react'
 import ProductCard from './ProductCard'
 import { SearchContext } from '../contexts/SearchContext'
 import { useContext } from 'react'
-import { Product } from '../effects/useProducts'
+import { Product } from '../hooks/useProducts'
 
 const ProductList = ({
   actions = [],

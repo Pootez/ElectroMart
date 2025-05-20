@@ -1,8 +1,22 @@
 import { useEffect, useState } from 'react'
 import { Product } from './useProducts'
 
+export async function getProduct(id: string): Promise<Product | undefined> {
+  try {
+    const res = await fetch(`/api/product/${id}`, {
+      method: 'GET',
+      headers: { 'Content-type': 'application/json' },
+    })
+    if (!res.ok) throw new Error('Failed to fetch product')
+    return await res.json()
+  } catch (err) {
+    console.error('getProduct error:', err)
+    return undefined
+  }
+}
+
 const useProduct = (id: string, deps?: any[]) => {
-  const [product, setProduct] = useState<Product | null>()
+  const [product, setProduct] = useState<Product | undefined>()
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -11,16 +25,12 @@ const useProduct = (id: string, deps?: any[]) => {
       const controller = new AbortController()
 
       setLoading(true)
-      setProduct(null)
+      setProduct(undefined)
       setError('')
 
-      fetch('/api/product/' + id, {
-        method: 'GET',
-        headers: { 'Content-type': 'application/json' },
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          setProduct(json)
+      getProduct(id)
+        .then((data) => {
+          setProduct(data)
           setLoading(false)
         })
         .catch((err) => {
