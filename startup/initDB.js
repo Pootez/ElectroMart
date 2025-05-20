@@ -21,6 +21,7 @@ const checkAndInitDB = async () => {
   )
   if (!res.rows[0].exists) {
     console.log('Users table not found, initializing schema.')
+    initDB()
   } else {
     console.log('Users table already exists, skipping init.')
   }
