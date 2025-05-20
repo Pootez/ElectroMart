@@ -1,24 +1,32 @@
 import { Button, Heading, HStack } from '@chakra-ui/react'
 import { ColorModeButton } from './ui/color-mode'
 import UserPopover from './UserPopover'
-import { useNavigate } from 'react-router'
+import { useLoaderData, useNavigate } from 'react-router'
 import { SearchInput } from './SearchInput'
-import { SearchContext } from '../contexts/SearchContext'
-import { useContext } from 'react'
 import CartDrawer from './CartDrawer'
+import { useContext, useEffect } from 'react'
+import { SearchContext } from '../contexts/SearchContext'
 
 export const Navbar = () => {
-  const navigate = useNavigate()
   const { searchParams, setSearchParams } = useContext(SearchContext)
+  const data = useLoaderData()
+  const navigate = useNavigate()
+  
+    useEffect(() => {
+      if (!data) return
+      setSearchParams({ ...searchParams, text: data?.searchText || '' })
+    }, [data?.searchText])
 
   return (
     <HStack padding="10px" bg="secondary" justifyContent="space-between">
-      <Button onClick={() => navigate('/')} variant="ghost">
-        <Heading>ElectroMart</Heading>
-      </Button>
+      <a href="/">
+        <Button variant="ghost">
+          <Heading>ElectroMart</Heading>
+        </Button>
+      </a>
       <SearchInput
         onSearch={(searchText) => {
-          setSearchParams({ ...searchParams, text: searchText })
+          searchText ? navigate('/search/' + searchText) : navigate('/')
         }}
       />
       <HStack>

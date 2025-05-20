@@ -8,8 +8,16 @@ import { ProfilePage } from './pages/ProfilePage'
 const router = createBrowserRouter([
   {
     path: '/',
+    loader: () => {return {searchText: ''}},
     element: <BrowsePage />,
     errorElement: <NotFoundPage />,
+  },
+  {
+    path: '/search/:searchText',
+    loader: ({ params }) => {
+      return { ...params }
+    },
+    element: <BrowsePage />
   },
   {
     path: '/signin',
