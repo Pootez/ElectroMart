@@ -1,12 +1,22 @@
-import { Button, VStack, Text, Separator, HStack, Box } from '@chakra-ui/react'
-import { CartItem } from './CartItem'
 import { useContext, useEffect, useState } from 'react'
 import { CartContext } from '../contexts/CartContext'
-import { CheckoutData, useCheckout } from '../hooks/useCheckout'
+import { useCartProductList } from '../hooks/useCartProductList'
 import { UserContext } from '../contexts/UserContext'
 import { useNavigate } from 'react-router'
+import { CheckoutData, paymentMethods, useCheckout } from '../hooks/useCheckout'
 import { useForm } from 'react-hook-form'
-import { useCartProductList } from '../hooks/useCartProductList'
+import {
+  Box,
+  HStack,
+  Separator,
+  VStack,
+  Text,
+  Button,
+  Fieldset,
+  Field,
+  Input,
+  NativeSelect,
+} from '@chakra-ui/react'
 
 export const CheckoutFieldset = () => {
   const { cartList, setCartList } = useContext(CartContext)
@@ -19,6 +29,8 @@ export const CheckoutFieldset = () => {
     (acc, { product, count }) => (product ? acc + product.price * count : acc),
     0
   )
+  const deliveryCost = 30
+  const total = subTotal + deliveryCost
 
   const { userDetails, token } = useContext(UserContext)
   const navigate = useNavigate()
@@ -32,25 +44,46 @@ export const CheckoutFieldset = () => {
     }
   }, [orderId])
 
-  const { handleSubmit } = useForm<CheckoutData>()
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CheckoutData>()
+
+  useEffect(() => {
+    setValue('items', cartList)
+  }, [cartList, setValue])
 
   return (
     <form
-      onSubmit={handleSubmit(() =>
-        userDetails ? setCheckoutData({ items: cartList }) : navigate('/signin')
+      onSubmit={handleSubmit((data) =>
+        userDetails ? setCheckoutData(data) : navigate('/signin')
       )}
     >
       <VStack alignItems="stretch">
         <VStack flexShrink={1}>
-          {cartProductList
-            .filter((item) => !!item.product)
-            .map((item) => (
-              <CartItem
-                key={item.product?.id}
-                product={item.product}
-                count={item.count}
-              />
-            ))}
+          {cartProductList.map(
+            (item) =>
+              !!item.product && (
+                <HStack
+                  width="100%"
+                  justifyContent="space-between"
+                  key={item.product.id}
+                >
+                  <Box>
+                    <Text fontWeight="bold" textStyle="xl">
+                      {`${item.product?.name} x${item.count}`}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text textStyle="xl">
+                      {item.product.price * item.count + ',-'}
+                    </Text>
+                  </Box>
+                </HStack>
+              )
+          )}
         </VStack>
         <Separator mt={2} />
         <HStack justifyContent="space-around">
@@ -63,21 +96,48 @@ export const CheckoutFieldset = () => {
             <Text textStyle="xl">{subTotal + ',-'}</Text>
           </Box>
         </HStack>
-        <Separator mb={2} />
-        <Button
-          size="2xl"
-          colorPalette="cyan"
-          loading={isLoading}
-          disabled={cartEmpty}
-          type="submit"
-          variant="subtle"
-        >
-          {cartEmpty
-            ? 'Cart is empty'
-            : userDetails
-            ? 'To payment'
-            : 'Sign in to continue'}
-        </Button>
+        <Separator my={2} />
+        <Fieldset.Root>
+          <Fieldset.Content>
+            <Field.Root invalid={!!errors.address}>
+              <Field.Label>Address</Field.Label>
+              <Input
+                {...register('address', { required: 'Address is required.' })}
+                placeholder="Placeroad 20"
+              />
+              <Field.ErrorText>{errors.address?.message}</Field.ErrorText>
+            </Field.Root>
+            <Field.Root invalid={!!errors.address}>
+              <Field.Label>Payment method</Field.Label>
+              <NativeSelect.Root>
+                <NativeSelect.Field
+                  placeholder="Select payment method"
+                  defaultValue={paymentMethods[0]}
+                  {...register('method', { required: 'Payment method is required.' })}
+                >
+                  {paymentMethods.map((method) => (
+                    <option value={method}>{method}</option>
+                  ))}
+                </NativeSelect.Field>
+              </NativeSelect.Root>
+              <Field.ErrorText>{errors.method?.message}</Field.ErrorText>
+            </Field.Root>
+          </Fieldset.Content>
+          <Button
+            size="2xl"
+            colorPalette="cyan"
+            loading={isLoading}
+            disabled={cartEmpty}
+            type="submit"
+            variant="subtle"
+          >
+            {cartEmpty
+              ? 'Cart is empty'
+              : userDetails
+              ? 'Simulate payment'
+              : 'Sign in to continue'}
+          </Button>
+        </Fieldset.Root>
       </VStack>
       {error}
     </form>

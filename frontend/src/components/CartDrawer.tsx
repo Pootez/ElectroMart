@@ -48,7 +48,7 @@ const CartDrawer = () => {
               <Button variant="outline" onClick={() => setCartList([])}>
                 Clear Cart
               </Button>
-              <Button onClick={() => navigate('/checkout')}>Checkout</Button>
+              <Button onClick={() => navigate('/cart')}>Checkout</Button>
             </Drawer.Footer>
             <Drawer.CloseTrigger asChild>
               <CloseButton size="sm" />

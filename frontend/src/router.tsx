@@ -2,13 +2,16 @@ import { createBrowserRouter } from 'react-router'
 import { BrowsePage } from './pages/BrowsePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { SigninPage } from './pages/SigninPage'
-import { CheckoutPage } from './pages/CheckoutPage'
+import { CartPage } from './pages/CartPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { CheckoutPage } from './pages/CheckoutPage'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    loader: () => {return {searchText: ''}},
+    loader: () => {
+      return { searchText: '' }
+    },
     element: <BrowsePage />,
     errorElement: <NotFoundPage />,
   },
@@ -17,7 +20,7 @@ const router = createBrowserRouter([
     loader: ({ params }) => {
       return { ...params }
     },
-    element: <BrowsePage />
+    element: <BrowsePage />,
   },
   {
     path: '/signin',
@@ -26,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: '/register',
     element: <SigninPage type="register" />,
+  },
+  {
+    path: '/cart',
+    element: <CartPage />,
   },
   {
     path: '/checkout',

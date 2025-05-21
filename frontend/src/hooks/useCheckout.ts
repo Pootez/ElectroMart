@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
 
+type PaymentMethod = 'Credit Card' |'Vipps' | 'Klarna'
+export const paymentMethods: PaymentMethod[] = ['Credit Card', 'Vipps', 'Klarna']
+
 export type CheckoutData = {
   items: { id: string; count: number }[]
+  address: string
+  method: PaymentMethod
 }
 
 export const useCheckout = (
