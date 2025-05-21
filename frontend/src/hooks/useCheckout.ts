@@ -23,7 +23,7 @@ export const useCheckout = (
       setOrderId('')
       setError('')
 
-      fetch('/api/auth/checkout', {
+      fetch('/api/orders/checkout', {
         method: 'POST',
         headers: { 'Content-type': 'application/json', 'auth-token': token },
         body: JSON.stringify(data),

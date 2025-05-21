@@ -28,7 +28,7 @@ const useProducts = (searchParams: SearchParamsType, deps?: any[]) => {
         .filter(([_, value]) => !!value)
         .map(([key, value]) => `${key}=${value}`)
         .join('&')
-      const endpoint = !apiParams ? '/api/products' : '/api/search?' + apiParams
+      const endpoint = !apiParams ? '/api/products/all' : '/api/products/search?' + apiParams
 
       fetch(endpoint, {
         method: 'GET',

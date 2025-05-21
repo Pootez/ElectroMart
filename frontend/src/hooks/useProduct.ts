@@ -3,7 +3,7 @@ import { Product } from './useProducts'
 
 export async function getProduct(id: string): Promise<Product | undefined> {
   try {
-    const res = await fetch(`/api/product/${id}`, {
+    const res = await fetch(`/api/products/ID/${id}`, {
       method: 'GET',
       headers: { 'Content-type': 'application/json' },
     })

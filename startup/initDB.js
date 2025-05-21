@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const db = require('./db')
+const db = require('../db')
 
 const initDB = async () => {
   const filePath = '../sql/electromart_pg.sql'
