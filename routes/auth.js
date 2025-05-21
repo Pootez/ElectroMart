@@ -7,17 +7,29 @@ const config = require('config')
 const bcrypt = require('bcrypt')
 const db = require('../db')
 
-router.get('/userDetails', auth, async (req, res) => {
+router.get('/me', auth, async (req, res) => {
   try {
-    const result = await db.query(
-      `SELECT email, firstName, lastName, phoneNumber FROM users WHERE userID = $1`,
+    const userResult = await db.query(
+      `SELECT email, firstName, lastName, phoneNumber
+       FROM users
+       WHERE userID = $1`,
       [req.user.userID]
     )
-    const userDetails = result.rows[0]
-    res.send({ userDetails })
+
+    const user = userResult.rows[0]
+    if (!user) return res.status(404).send('User not found')
+
+    const orderResult = await db.query(
+      `SELECT id FROM orders WHERE userID = $1`,
+      [req.user.userID]
+    )
+
+    const orders = orderResult.rows.map((row) => row.id.toString())
+
+    res.json({ userDetails: { ...user, orders } })
   } catch (err) {
     console.error(err)
-    res.status(500).send('Internal server error')
+    res.status(500).send('Failed to fetch user details')
   }
 })
 

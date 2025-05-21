@@ -5,6 +5,7 @@ export type UserDetails = {
   firstname: string
   lastname: string
   phonenumber: string
+  orders: string[]
 }
 
 const useUserDetails = (token: string, deps?: any[]) => {
@@ -25,7 +26,7 @@ const useUserDetails = (token: string, deps?: any[]) => {
       setUserDetails(undefined)
       setError('')
 
-      fetch('/api/auth/userDetails', {
+      fetch('/api/auth/me', {
         method: 'GET',
         headers: { 'Content-type': 'application/json', 'auth-token': token },
       })

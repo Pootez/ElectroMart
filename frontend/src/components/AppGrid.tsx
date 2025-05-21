@@ -12,11 +12,11 @@ export const AppGrid = ({
     <Grid
       templateAreas={{
         base: `"nav" "main"`,
-        lg: aside ? `"nav nav" "aside main"` : `"nav nav" "main main"`,
+        lg: aside ? `"nav nav" "main aside"` : `"nav nav" "main main"`,
       }}
       templateColumns={{
         base: '1fr',
-        lg: '200px 1fr',
+        lg: '2fr 1fr',
       }}
       templateRows="50px 1fr"
       gap={3} height="100vh" bg="primary"

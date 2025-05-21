@@ -40,7 +40,7 @@ export const CheckoutFieldset = () => {
   useEffect(() => {
     if (orderId) {
       setCartList([])
-      navigate('/order/' + orderId)
+      window.location.href = '/profile'
     }
   }, [orderId])
 
@@ -72,12 +72,12 @@ export const CheckoutFieldset = () => {
                   key={item.product.id}
                 >
                   <Box>
-                    <Text fontWeight="bold" textStyle="xl">
+                    <Text fontWeight="bold" textStyle="lg">
                       {`${item.product?.name} x${item.count}`}
                     </Text>
                   </Box>
                   <Box>
-                    <Text textStyle="xl">
+                    <Text textStyle="md">
                       {item.product.price * item.count + ',-'}
                     </Text>
                   </Box>
@@ -98,7 +98,7 @@ export const CheckoutFieldset = () => {
               </Text>
             </Box>
             <Box>
-              <Text textStyle="xl">{fee.amount + ',-'}</Text>
+              <Text textStyle="lg">{fee.amount + ',-'}</Text>
             </Box>
           </HStack>
         ))}
