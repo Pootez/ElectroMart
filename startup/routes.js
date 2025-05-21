@@ -8,10 +8,10 @@ const defaultRouter = require('../routes/default')
 
 module.exports = function (app) {
   app.use(express.json())
-  app.use(express.static(path.join(__dirname, './frontend/dist')))
+  app.use(express.static(path.join(__dirname, '../frontend/dist')))
 
   app.use('/api/products', products)
   app.use('/api/orders', orders)
   app.use('/api/auth', auth)
-  app.use('', defaultRouter)
+  app.use('/', defaultRouter)
 }

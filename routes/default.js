@@ -2,12 +2,14 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 
-router.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist/admin.html'))
+const distPath = path.join(__dirname, '../frontend/dist')
+
+router.get('admin', (req, res) => {
+  res.sendFile('admin.html', { root: distPath })
 })
 
-router.get('/*splat', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'))
+router.get('*splat', (req, res) => {
+  res.sendFile('index.html', { root: distPath })
 })
 
 module.exports = router
