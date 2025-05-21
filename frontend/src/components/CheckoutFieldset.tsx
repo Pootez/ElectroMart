@@ -86,16 +86,22 @@ export const CheckoutFieldset = () => {
           )}
         </VStack>
         <Separator mt={2} />
-        <HStack justifyContent="space-around">
-          <Box>
-            <Text fontWeight="bold" textStyle="xl">
-              Subtotal
-            </Text>
-          </Box>
-          <Box>
-            <Text textStyle="xl">{subTotal + ',-'}</Text>
-          </Box>
-        </HStack>
+        {[
+          { name: 'Subtotal', amount: subTotal },
+          { name: 'Shipping', amount: deliveryCost },
+          { name: 'Total', amount: total },
+        ].map((fee) => (
+          <HStack width="100%" justifyContent="space-between" key={fee.name}>
+            <Box>
+              <Text fontWeight="bold" textStyle="xl">
+                {fee.name}
+              </Text>
+            </Box>
+            <Box>
+              <Text textStyle="xl">{fee.amount + ',-'}</Text>
+            </Box>
+          </HStack>
+        ))}
         <Separator my={2} />
         <Fieldset.Root>
           <Fieldset.Content>
@@ -113,7 +119,9 @@ export const CheckoutFieldset = () => {
                 <NativeSelect.Field
                   placeholder="Select payment method"
                   defaultValue={paymentMethods[0]}
-                  {...register('method', { required: 'Payment method is required.' })}
+                  {...register('method', {
+                    required: 'Payment method is required.',
+                  })}
                 >
                   {paymentMethods.map((method) => (
                     <option value={method}>{method}</option>
