@@ -1,4 +1,8 @@
 {
-    "jwtPrivateKey": "JWT_PRIVATEKEY",
-    "databaseUrl": "DATABASE_URL"
+  "jwtPrivateKey": "JWT_PRIVATEKEY",
+  "databaseUrl": "DATABASE_URL",
+  "adminUser": {
+    "email": "ADMIN_EMAIL",
+    "password": "ADMIN_PASSWORD"
+  }
 }

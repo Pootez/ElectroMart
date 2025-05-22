@@ -3,6 +3,7 @@ const app = express()
 
 require('./startup/config.js')()
 require('./startup/initDB.js').checkAndInitDB()
+require('./startup/initDB.js').createAdmin()
 require('./startup/routes.js')(app)
 
 const port = process.env.PORT || 3000

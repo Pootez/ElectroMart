@@ -4,6 +4,7 @@ const path = require('path')
 const products = require('../routes/products')
 const orders = require('../routes/orders')
 const auth = require('../routes/auth')
+const admin = require('../routes/admin')
 const defaultRouter = require('../routes/default')
 
 module.exports = function (app) {
@@ -13,5 +14,6 @@ module.exports = function (app) {
   app.use('/api/products', products)
   app.use('/api/orders', orders)
   app.use('/api/auth', auth)
+  app.use('/api/admin', admin)
   app.use('/', defaultRouter)
 }

@@ -1,3 +1,11 @@
 {
-    "jwtPrivateKey": "dev-jwt-key"
+  "jwtPrivateKey": "dev-jwt-key",
+  "adminUser": {
+    "email": "admin@electromart.com",
+    "firstName": "Admin",
+    "lastName": "User",
+    "phoneNumber": "00000000",
+    "isAdmin": true,
+    "password": ""
+  }
 }
