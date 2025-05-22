@@ -60,6 +60,7 @@ router.post('/register', async (req, res) => {
         userID: user.userid,
         email: user.email,
         isAdmin: user.isadmin,
+        timestamp: Date.now(),
       },
       config.get('jwtPrivateKey')
     )
@@ -88,6 +89,7 @@ router.post('/login', async (req, res) => {
         userID: user.userid,
         email: user.email,
         isAdmin: user.isadmin,
+        timestamp: Date.now()
       },
       config.get('jwtPrivateKey')
     )

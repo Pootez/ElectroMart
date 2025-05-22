@@ -7,6 +7,9 @@ module.exports = function (req, res, next) {
 
   try {
     const decoded = jwt.verify(token, config.get('jwtPrivateKey'))
+    if (Date.now() - decode.timestamp > 3 * 24 * 60 * 60 * 1000) {
+      return res.status(401).send('Expired token.')
+    }
     req.user = decoded
     next()
   } catch (ex) {
