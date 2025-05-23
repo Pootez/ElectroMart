@@ -113,7 +113,7 @@ export const CheckoutFieldset = () => {
               />
               <Field.ErrorText>{errors.address?.message}</Field.ErrorText>
             </Field.Root>
-            <Field.Root invalid={!!errors.address}>
+            <Field.Root invalid={!!errors.method}>
               <Field.Label>Payment method</Field.Label>
               <NativeSelect.Root>
                 <NativeSelect.Field
